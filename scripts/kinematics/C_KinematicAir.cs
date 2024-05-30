@@ -25,6 +25,11 @@ public partial class C_KinematicAir : C_Kinematic
     {
         get { return Mathf.Abs(character.GlobalPosition.Y - peekHeight) > maximumFallHeight; }
     }
+
+    public float fallHeight
+    {
+        get { return Mathf.Abs(character.GlobalPosition.Y - peekHeight); }
+    }
     #endregion
 
     #region Constructor

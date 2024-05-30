@@ -22,9 +22,13 @@ public partial class C_MachineState : Node
     [Export]
     public string defaultState = "Idle";
 
+    protected C_Character _character;
     protected bool _canReadInputs;
     protected C_State _currentState;
     protected C_State _previousState;
+    protected bool _isFacingObstacle;
+    protected bool _isFacingPlayer;
+    protected bool _isFacingLedge;
     #endregion
 
     #region Properties
@@ -41,6 +45,26 @@ public partial class C_MachineState : Node
     public C_State currentState
     {
         get { return _currentState; }
+    }
+
+    public bool isFacingLedge
+    {
+        get { return _isFacingLedge; }
+    }
+
+    public bool isFacingObstacle
+    {
+        get { return _isFacingObstacle; }
+    }
+
+    public bool isFacingPlayer
+    {
+        get { return _isFacingPlayer; }
+    }
+
+    public bool isFacingSomething
+    {
+        get { return _isFacingObstacle || _isFacingPlayer; }
     }
     #endregion
 
@@ -80,6 +104,8 @@ public partial class C_MachineState : Node
     {
         if (sprite == null || kinematics == null) GD.PushError("C_MachineState n'est la liée correctement !");
 
+        _character = Owner as C_Character;
+        
         _currentState = FindChild(defaultState) as C_State;
         if (_currentState.CanEnter() == false) GD.PushError("L'état initial de la C_MachineState n'accepte pas l'entrée !");
         _currentState.Enter();
@@ -90,7 +116,20 @@ public partial class C_MachineState : Node
     public override void _PhysicsProcess(double delta)
     {
         base._PhysicsProcess(delta);
+
         _canReadInputs = readInputs && C_Inputs.CanListenInputs(C_Inputs.E_Listener.Player);
+
+        if (obstacleDetector != null && obstacleDetector.IsColliding())
+        {
+            _isFacingPlayer = obstacleDetector.GetCollider() is C_Player;
+            _isFacingObstacle = _isFacingPlayer == false;
+        }
+        else
+        {
+            _isFacingPlayer = _isFacingObstacle = false;
+        }
+        
+        _isFacingLedge = ledgeDetector != null && ledgeDetector.IsColliding() == false;
     }
     #endregion
 }

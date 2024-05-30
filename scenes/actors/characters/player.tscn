@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://b8n4gqouy1r6b"]
+[gd_scene load_steps=29 format=3 uid="uid://b8n4gqouy1r6b"]
 
 [ext_resource type="Script" path="res://scripts/actors/characters/C_Player.cs" id="1_j5pu3"]
 [ext_resource type="Material" uid="uid://bu4gnag3fkcxh" path="res://assets/materials/lit_pixelart.tres" id="2_ibki3"]
@@ -19,6 +19,8 @@
 [ext_resource type="Script" path="res://scripts/machine_state/states/C_StateRunning.cs" id="12_d6kr0"]
 [ext_resource type="Script" path="res://scripts/machine_state/states/C_StateJumping.cs" id="13_66clq"]
 [ext_resource type="Script" path="res://scripts/machine_state/states/C_StateFlyingJump.cs" id="14_iqch2"]
+[ext_resource type="Script" path="res://scripts/machine_state/states/C_StateLanding.cs" id="16_gmg0r"]
+[ext_resource type="Script" path="res://scripts/machine_state/C_StateStopwatch.cs" id="17_1nx4j"]
 [ext_resource type="Script" path="res://scripts/nodes/C_Inventory.cs" id="18_5dxkx"]
 [ext_resource type="Script" path="res://scripts/machine_state/states/C_StateAttacking.cs" id="18_kur0p"]
 [ext_resource type="Script" path="res://scripts/machine_state/states/C_StateHitted.cs" id="21_qox5s"]
@@ -26,12 +28,11 @@
 [ext_resource type="Script" path="res://scripts/actors/characters/C_ActorDetector.cs" id="22_ypct8"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_04s2f"]
-radius = 7.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2xalx"]
 size = Vector2(27, 20)
 
-[node name="Player Character" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 13
 script = ExtResource("1_j5pu3")
@@ -85,8 +86,9 @@ type = 3
 [node name="Jump" type="Node" parent="Kinematics/Air" node_paths=PackedStringArray("airKinematic")]
 script = ExtResource("6_qjnku")
 airKinematic = NodePath("..")
-applyLocalGravity = false
-height = 5.0
+height = 10.0
+timeToAscent = 0.1
+timeToDescent = 0.125
 type = 7
 
 [node name="Ground" type="Node" parent="Kinematics"]
@@ -112,10 +114,12 @@ timeToAscent = 0.35
 timeToDescent = 0.2
 type = 7
 
-[node name="Machine State" type="Node" parent="." node_paths=PackedStringArray("sprite", "kinematics")]
+[node name="Machine State" type="Node" parent="." node_paths=PackedStringArray("sprite", "kinematics", "obstacleDetector", "ledgeDetector")]
 script = ExtResource("8_6qh2f")
 sprite = NodePath("../Sprite")
 kinematics = NodePath("../Kinematics")
+obstacleDetector = NodePath("../Obstacle Detector")
+ledgeDetector = NodePath("../Ledge Detector")
 readInputs = true
 
 [node name="Idle" type="Node" parent="Machine State"]
@@ -123,6 +127,14 @@ script = ExtResource("9_nrns4")
 
 [node name="Flying" type="Node" parent="Machine State"]
 script = ExtResource("10_0xp8d")
+
+[node name="Landing" type="Node" parent="Machine State" node_paths=PackedStringArray("damagedAttribute")]
+script = ExtResource("16_gmg0r")
+damagedAttribute = NodePath("../../Attributes/Vitality")
+
+[node name="Stopwatch" type="Node" parent="Machine State/Landing"]
+script = ExtResource("17_1nx4j")
+duration = 0.5
 
 [node name="Walking" type="Node" parent="Machine State"]
 script = ExtResource("11_wja3e")
@@ -162,6 +174,11 @@ attributeDamage = 4.0
 [node name="Hitted" type="Node" parent="Machine State" node_paths=PackedStringArray("attribute")]
 script = ExtResource("21_qox5s")
 attribute = NodePath("../../Attributes/Vitality")
+
+[node name="Stopwatch" type="Node" parent="Machine State/Hitted"]
+script = ExtResource("17_1nx4j")
+nextState = "Idle"
+duration = 0.5
 
 [node name="Death" type="Node" parent="Machine State" node_paths=PackedStringArray("attribute")]
 script = ExtResource("22_cd181")
@@ -204,6 +221,16 @@ collision_mask = 192
 monitorable = false
 script = ExtResource("22_ypct8")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Actors Detector"]
+[node name="Collider" type="CollisionShape2D" parent="Actors Detector"]
 position = Vector2(-1.5, 14)
 shape = SubResource("RectangleShape2D_2xalx")
+
+[node name="Obstacle Detector" type="RayCast2D" parent="."]
+rotation = -1.5708
+target_position = Vector2(-5.24537e-07, 12)
+collision_mask = 47
+
+[node name="Ledge Detector" type="RayCast2D" parent="."]
+position = Vector2(25, 0)
+target_position = Vector2(0, 22)
+collision_mask = 9

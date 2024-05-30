@@ -64,7 +64,10 @@ public partial class C_Kinematic : Node
 
     public void Repel(Node2D from, float lateralSpeed, float verticalSpeed, bool impulsion = false)
     {
-        Vector2 force = new Vector2((character.GlobalPosition.X >= from.GlobalPosition.X ? 1 : -1) * lateralSpeed, -verticalSpeed);
+        Vector2 force = Vector2.Zero;
+
+        if (from != null) force = new Vector2((character.GlobalPosition.X >= from.GlobalPosition.X ? 1 : -1) * lateralSpeed, -verticalSpeed);
+        else force = new Vector2(-character.forwardDirection * lateralSpeed, -verticalSpeed);
 
         if (impulsion) character.Velocity += force;
         else character.Velocity = force;

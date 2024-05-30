@@ -44,16 +44,16 @@ public partial class C_StateFlying : C_State
     public override void CheckStatus(double delta)
     {
         if (machine.kinematics.isGrounded) 
-        { 
-            airKinematic.peekHeight = 0;
+        {
             airKinematic.ResetGravity();
-            machine.ChangeState("Idle"); 
+            machine.ChangeState(airKinematic.isHighFall ? "Landing" : "Idle"); 
+            airKinematic.peekHeight = 0;
             return; 
         }
 
         if (machine.CanReadInputs)
         {
-            if (C_Inputs.IsActionJustPressed("jump") && machine.ChangeState("Jumping")) return;
+            if (C_Inputs.IsActionJustPressed("jump") && machine.ChangeState("Flying Jump")) return;
             if (C_Inputs.IsActionJustPressed("attack") && machine.ChangeState("Attacking 1")) return;
         }
     }

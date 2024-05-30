@@ -20,7 +20,7 @@ public partial class C_StateWalking : C_State
     #region Functions Overrides
     public override bool CanEnter()
     {
-        return moveKinematic != null;
+        return machine.isFacingSomething ? false : moveKinematic != null;
     }
 
     public override void Enter()
@@ -41,9 +41,9 @@ public partial class C_StateWalking : C_State
             if (C_Inputs.direction.X != 0)
             {
                 if (C_Inputs.IsActionPressed("walk") == false && Mathf.Abs(C_Inputs.direction.X) > 0.5f)
-                    machine.ChangeState("Running");
+                    if (machine.ChangeState("Running")) return;
             }
-            else machine.ChangeState("Idle");
+            if (C_Inputs.direction.X == 0 || machine.isFacingSomething) machine.ChangeState("Idle");
         }
     }
     #endregion
