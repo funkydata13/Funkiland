@@ -6,8 +6,9 @@ using System.Diagnostics;
 public partial class C_ActorDetector : Area2D
 {
     protected C_Character _character;
-    protected List<I_Item> items;
-    protected C_StackList<I_Item> collectibles;
+    protected List<I_Item> _items;
+    protected C_StackList<I_Item> _collectibles;
+    protected C_StackList<I_Activable> _activables;
 
     public override void _Ready()
     {
@@ -15,50 +16,73 @@ public partial class C_ActorDetector : Area2D
 
         _character = Owner as C_Character;
 
-        items = new List<I_Item>();
-        collectibles = new C_StackList<I_Item>();
+        _items = new List<I_Item>();
+        _collectibles = new C_StackList<I_Item>();
+        _activables = new C_StackList<I_Activable>();
 
         BodyEntered += OnBodyEnter;
         BodyExited += OnBodyExit;
+        AreaEntered += OnAreaEnter;
+        AreaExited += OnAreaExit;
 
         SetProcess(false);
     }
 
     protected void OnBodyEnter(Node2D body)
     {
-        if (body is I_Item) items.Add(body as I_Item);
+        if (body is I_Item) _items.Add(body as I_Item);
     }
 
     protected void OnBodyExit(Node2D body)
     {
-        if (body is I_Item) { items.Remove(body as I_Item); collectibles.Remove(body as I_Item); }
+        if (body is I_Item) { _items.Remove(body as I_Item); _collectibles.Remove(body as I_Item); }
+    }
+
+    protected void OnAreaEnter(Area2D area)
+    {
+        if (area is I_Activable) _activables.Add(area as I_Activable);
+    }
+
+    protected void OnAreaExit(Area2D area)
+    {
+        if (area is I_Activable) _activables.Remove(area as I_Activable);
+    }
+
+    protected void ProcessActivablesList()
+    {
+        if (_activables.Count == 0) return;
+
+        I_Activable activable = _activables.Pop();
+        if (activable == null) return;
+        if (activable.isActivated || activable.isActivating || activable.CanActivate(_character) == false) _activables.Push();
+        else activable.Activate();
     }
 
     protected bool ProcessCollectiblesList()
     {
-        if (items.Count > 0)
+        if (_items.Count > 0)
         {
             int i = 0;
 
-            while (i < items.Count)
+            while (i < _items.Count)
             {
-                if (items[i].state == C_Item.E_State.Pending)
+                if (_items[i].state == C_Item.E_State.Pending)
                 {
-                    collectibles.Add(items[i]);
-                    items.RemoveAt(i);
+                    _collectibles.Add(_items[i]);
+                    _items.RemoveAt(i);
                 }
                 else i++;
             }
         }
         
-        if (collectibles.Count == 0) return false;
+        if (_collectibles.Count == 0) return false;
 
-        I_Item nextCollectible = collectibles.Pop();
+        I_Item nextCollectible = _collectibles.Pop();
         if (nextCollectible == null) return false;
         if (nextCollectible.state == C_Item.E_State.Pending)
         {
             nextCollectible.Pick(_character.GlobalPosition, _character.inventory);
-            collectibles.Push();
+            _collectibles.Push();
             return true;
         }
         else return false;
@@ -70,7 +94,7 @@ public partial class C_ActorDetector : Area2D
 
         if (C_Inputs.CanListenInputs(C_Inputs.E_Listener.Player) && C_Inputs.IsActionJustPressed("action"))
         {
-            ProcessCollectiblesList();
+            if (ProcessCollectiblesList() == false) ProcessActivablesList();
         }
     }
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dq15y4k1qfej0"]
+[gd_scene load_steps=11 format=3 uid="uid://dq15y4k1qfej0"]
 
 [ext_resource type="Script" path="res://scripts/nodes/C_Level.cs" id="1_ssrbo"]
 [ext_resource type="PackedScene" uid="uid://cahqcpod2a26n" path="res://scenes/actors/characters/player_spawner.tscn" id="2_p7w2u"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://dopfjj0hqmk7j" path="res://scenes/actors/collectibles/key.tscn" id="7_ceonl"]
 [ext_resource type="PackedScene" uid="uid://c0vm7xmhuj68u" path="res://scenes/actors/collectibles/potion.tscn" id="8_pj5sr"]
 [ext_resource type="PackedScene" uid="uid://caiip7tqprpdq" path="res://scenes/actors/characters/boar.tscn" id="9_mx4jm"]
+[ext_resource type="PackedScene" uid="uid://j07rvg14fh7i" path="res://scenes/actors/activables/chest.tscn" id="10_cd17y"]
 
 [node name="Test Level" type="Node2D" node_paths=PackedStringArray("currentPlayerSpawner")]
 script = ExtResource("1_ssrbo")
@@ -44,6 +45,14 @@ startState = 2
 position = Vector2(16, -64)
 startState = 2
 
+[node name="Key2" parent="." instance=ExtResource("7_ceonl")]
+position = Vector2(32, -64)
+startState = 2
+
+[node name="Key3" parent="." instance=ExtResource("7_ceonl")]
+position = Vector2(80, -64)
+startState = 2
+
 [node name="Potion" parent="." instance=ExtResource("8_pj5sr")]
 position = Vector2(176, -144)
 attributeType = 1
@@ -51,3 +60,8 @@ startState = 2
 
 [node name="Boar" parent="." instance=ExtResource("9_mx4jm")]
 position = Vector2(224, -160)
+
+[node name="Chest" parent="." instance=ExtResource("10_cd17y")]
+position = Vector2(128, -64)
+variant = 2
+keysNeeded = 3

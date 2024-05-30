@@ -117,7 +117,7 @@ public partial class C_Inventory : Node
         {
             int initialQuantity = items[type];
             items[type] = Mathf.Clamp(items[type] - quantity, 0, GetInventoryCapacity(type)); 
-            if (items[type] != initialQuantity) EmitSignal(SignalName.Changed, (int)type, items[type], false);
+            if (items[type] != initialQuantity) EmitSignal(SignalName.Changed, (int)type, items[type]);
         }
     }
 
@@ -125,13 +125,11 @@ public partial class C_Inventory : Node
     {
         foreach (C_Item.E_Type type in items.Keys)
         {
-            Debug.Print("pass : " + items[type].ToString());
             if (items[type] > 0)
             {
                 for (int i = 0; i < items[type]; i++)
                 {
                     C_Item item = C_Assets.CreateItemInstance(type);
-                    Debug.Print("item : " + item.ToString());
                     item.Visible = false;
                     Owner.GetParent<Node2D>().AddChild(item);
                     item.Drop((Owner as Node2D).GlobalPosition);
