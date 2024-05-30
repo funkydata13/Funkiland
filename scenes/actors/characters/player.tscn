@@ -1,0 +1,209 @@
+[gd_scene load_steps=27 format=3 uid="uid://b8n4gqouy1r6b"]
+
+[ext_resource type="Script" path="res://scripts/actors/characters/C_Player.cs" id="1_j5pu3"]
+[ext_resource type="Material" uid="uid://bu4gnag3fkcxh" path="res://assets/materials/lit_pixelart.tres" id="2_ibki3"]
+[ext_resource type="SpriteFrames" uid="uid://dempeyykpydjp" path="res://assets/characters/player_frames.tres" id="2_jwlxx"]
+[ext_resource type="Script" path="res://scripts/kinematics/C_Kinematic.cs" id="3_0fv5l"]
+[ext_resource type="Script" path="res://scripts/nodes/C_SpriteAnimated.cs" id="3_e5734"]
+[ext_resource type="Script" path="res://scripts/kinematics/C_KinematicAir.cs" id="4_dcemb"]
+[ext_resource type="Script" path="res://scripts/actors/attributes/C_Attributes.cs" id="4_wnqvt"]
+[ext_resource type="AnimationLibrary" uid="uid://wjfghh1fu0yy" path="res://assets/animations/sprite_animations.res" id="5_akj0y"]
+[ext_resource type="Script" path="res://scripts/actors/attributes/C_Attribute.cs" id="5_ctif8"]
+[ext_resource type="Script" path="res://scripts/kinematics/C_KinematicMove.cs" id="5_tsser"]
+[ext_resource type="Script" path="res://scripts/kinematics/C_KinematicJump.cs" id="6_qjnku"]
+[ext_resource type="Script" path="res://scripts/kinematics/C_KinematicGround.cs" id="7_h1a71"]
+[ext_resource type="Script" path="res://scripts/machine_state/C_MachineState.cs" id="8_6qh2f"]
+[ext_resource type="Script" path="res://scripts/machine_state/states/C_StateIdle.cs" id="9_nrns4"]
+[ext_resource type="Script" path="res://scripts/machine_state/states/C_StateFlying.cs" id="10_0xp8d"]
+[ext_resource type="Script" path="res://scripts/machine_state/states/C_StateWalking.cs" id="11_wja3e"]
+[ext_resource type="Script" path="res://scripts/machine_state/states/C_StateRunning.cs" id="12_d6kr0"]
+[ext_resource type="Script" path="res://scripts/machine_state/states/C_StateJumping.cs" id="13_66clq"]
+[ext_resource type="Script" path="res://scripts/machine_state/states/C_StateFlyingJump.cs" id="14_iqch2"]
+[ext_resource type="Script" path="res://scripts/nodes/C_Inventory.cs" id="18_5dxkx"]
+[ext_resource type="Script" path="res://scripts/machine_state/states/C_StateAttacking.cs" id="18_kur0p"]
+[ext_resource type="Script" path="res://scripts/machine_state/states/C_StateHitted.cs" id="21_qox5s"]
+[ext_resource type="Script" path="res://scripts/machine_state/states/C_StateDeath.cs" id="22_cd181"]
+[ext_resource type="Script" path="res://scripts/actors/characters/C_ActorDetector.cs" id="22_ypct8"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_04s2f"]
+radius = 7.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2xalx"]
+size = Vector2(27, 20)
+
+[node name="Player Character" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 13
+script = ExtResource("1_j5pu3")
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_04s2f")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+material = ExtResource("2_ibki3")
+sprite_frames = ExtResource("2_jwlxx")
+animation = &"Attacking 3"
+frame = 7
+frame_progress = 1.0
+offset = Vector2(1, -13)
+script = ExtResource("3_e5734")
+
+[node name="Anim Player" type="AnimationPlayer" parent="Sprite"]
+libraries = {
+"sprite_animations": ExtResource("5_akj0y")
+}
+
+[node name="Attributes" type="Node" parent="."]
+script = ExtResource("4_wnqvt")
+
+[node name="Vitality" type="Node" parent="Attributes"]
+script = ExtResource("5_ctif8")
+regenerationWhenDepleted = false
+
+[node name="Stamina" type="Node" parent="Attributes"]
+script = ExtResource("5_ctif8")
+type = 1
+regenerationRate = 1.0
+
+[node name="Magic" type="Node" parent="Attributes"]
+script = ExtResource("5_ctif8")
+type = 2
+regenerationRate = 0.05
+
+[node name="Kinematics" type="Node" parent="."]
+script = ExtResource("3_0fv5l")
+
+[node name="Air" type="Node" parent="Kinematics"]
+script = ExtResource("4_dcemb")
+type = 1
+
+[node name="Move" type="Node" parent="Kinematics/Air"]
+script = ExtResource("5_tsser")
+movementFriction = 4.0
+type = 3
+
+[node name="Jump" type="Node" parent="Kinematics/Air" node_paths=PackedStringArray("airKinematic")]
+script = ExtResource("6_qjnku")
+airKinematic = NodePath("..")
+applyLocalGravity = false
+height = 5.0
+type = 7
+
+[node name="Ground" type="Node" parent="Kinematics"]
+script = ExtResource("7_h1a71")
+type = 2
+
+[node name="Walk" type="Node" parent="Kinematics/Ground"]
+script = ExtResource("5_tsser")
+speed = 23.0
+movementFriction = 10.0
+type = 4
+
+[node name="Run" type="Node" parent="Kinematics/Ground"]
+script = ExtResource("5_tsser")
+movementFriction = 10.0
+type = 5
+
+[node name="Jump" type="Node" parent="Kinematics/Ground" node_paths=PackedStringArray("airKinematic")]
+script = ExtResource("6_qjnku")
+airKinematic = NodePath("../../Air")
+height = 40.0
+timeToAscent = 0.35
+timeToDescent = 0.2
+type = 7
+
+[node name="Machine State" type="Node" parent="." node_paths=PackedStringArray("sprite", "kinematics")]
+script = ExtResource("8_6qh2f")
+sprite = NodePath("../Sprite")
+kinematics = NodePath("../Kinematics")
+readInputs = true
+
+[node name="Idle" type="Node" parent="Machine State"]
+script = ExtResource("9_nrns4")
+
+[node name="Flying" type="Node" parent="Machine State"]
+script = ExtResource("10_0xp8d")
+
+[node name="Walking" type="Node" parent="Machine State"]
+script = ExtResource("11_wja3e")
+
+[node name="Running" type="Node" parent="Machine State"]
+script = ExtResource("12_d6kr0")
+
+[node name="Jumping" type="Node" parent="Machine State"]
+script = ExtResource("13_66clq")
+
+[node name="Flying Jump" type="Node" parent="Machine State"]
+script = ExtResource("14_iqch2")
+
+[node name="Attacking 1" type="Node" parent="Machine State" node_paths=PackedStringArray("area")]
+script = ExtResource("18_kur0p")
+area = NodePath("../../Attack 1")
+isComboLink = true
+comboFrameTrigger = 3
+
+[node name="Attacking 2" type="Node" parent="Machine State" node_paths=PackedStringArray("area")]
+script = ExtResource("18_kur0p")
+area = NodePath("../../Attack 2")
+repelForce = 5.0
+attackIndex = 2
+isComboLink = true
+attributeConsumption = 2.0
+attributeDamage = 2.0
+
+[node name="Attacking 3" type="Node" parent="Machine State" node_paths=PackedStringArray("area")]
+script = ExtResource("18_kur0p")
+area = NodePath("../../Attack 3")
+repelForce = 100.0
+attackIndex = 3
+attributeConsumption = 3.0
+attributeDamage = 4.0
+
+[node name="Hitted" type="Node" parent="Machine State" node_paths=PackedStringArray("attribute")]
+script = ExtResource("21_qox5s")
+attribute = NodePath("../../Attributes/Vitality")
+
+[node name="Death" type="Node" parent="Machine State" node_paths=PackedStringArray("attribute")]
+script = ExtResource("22_cd181")
+attribute = NodePath("../../Attributes/Vitality")
+frictionFactor = 0.25
+
+[node name="Inventory" type="Node" parent="."]
+script = ExtResource("18_5dxkx")
+
+[node name="Attack 1" type="Area2D" parent="."]
+visible = false
+collision_layer = 2
+collision_mask = 28
+monitorable = false
+
+[node name="Collider" type="CollisionPolygon2D" parent="Attack 1"]
+polygon = PackedVector2Array(-17, -22, 27, -7, 30, -1, 26, 4, 2, 4, -21, -4)
+
+[node name="Attack 2" type="Area2D" parent="."]
+visible = false
+collision_layer = 2
+collision_mask = 28
+monitorable = false
+
+[node name="Collider" type="CollisionPolygon2D" parent="Attack 2"]
+polygon = PackedVector2Array(-15, -1, -2, -7, 10, -10, 21, -4, 20, 2, 15, 7, 2, 9, -17, 6)
+
+[node name="Attack 3" type="Area2D" parent="."]
+visible = false
+collision_layer = 2
+collision_mask = 28
+monitorable = false
+
+[node name="Collider" type="CollisionPolygon2D" parent="Attack 3"]
+polygon = PackedVector2Array(-14, -20, 3, -21, 15, -18, 25, -6, 27, 11, 19, 13, 5, 10)
+
+[node name="Actors Detector" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 192
+monitorable = false
+script = ExtResource("22_ypct8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Actors Detector"]
+position = Vector2(-1.5, 14)
+shape = SubResource("RectangleShape2D_2xalx")

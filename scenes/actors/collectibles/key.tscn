@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://dopfjj0hqmk7j"]
+
+[ext_resource type="Script" path="res://scripts/actors/collectibles/C_ItemKey.cs" id="1_8dxyh"]
+[ext_resource type="Material" uid="uid://bu4gnag3fkcxh" path="res://assets/materials/lit_pixelart.tres" id="2_d1t4u"]
+[ext_resource type="Texture2D" uid="uid://d0x6haqsjcfw2" path="res://assets/sprites/key.png" id="3_3y64q"]
+[ext_resource type="AnimationLibrary" uid="uid://wjfghh1fu0yy" path="res://assets/animations/sprite_animations.res" id="4_cs8r5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vjic2"]
+size = Vector2(12, 7)
+
+[node name="Key" type="RigidBody2D"]
+collision_layer = 64
+lock_rotation = true
+script = ExtResource("1_8dxyh")
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+position = Vector2(8, -3.5)
+shape = SubResource("RectangleShape2D_vjic2")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+material = ExtResource("2_d1t4u")
+position = Vector2(8, -3)
+texture = ExtResource("3_3y64q")
+
+[node name="Anim Player" type="AnimationPlayer" parent="Sprite"]
+libraries = {
+"sprite_animations": ExtResource("4_cs8r5")
+}

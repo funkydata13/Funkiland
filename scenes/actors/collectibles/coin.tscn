@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://b81l0oa7k54y4"]
+
+[ext_resource type="Script" path="res://scripts/actors/collectibles/C_ItemCoin.cs" id="1_c8gx0"]
+[ext_resource type="Material" uid="uid://bu4gnag3fkcxh" path="res://assets/materials/lit_pixelart.tres" id="2_4olh4"]
+[ext_resource type="Texture2D" uid="uid://c5wrts7u7akdo" path="res://assets/sprites/coin.png" id="3_boo5j"]
+[ext_resource type="AnimationLibrary" uid="uid://wjfghh1fu0yy" path="res://assets/animations/sprite_animations.res" id="4_hnloy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2e2gb"]
+size = Vector2(6, 9)
+
+[node name="Coin" type="RigidBody2D"]
+collision_layer = 64
+lock_rotation = true
+script = ExtResource("1_c8gx0")
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+position = Vector2(8, -4.5)
+shape = SubResource("RectangleShape2D_2e2gb")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+material = ExtResource("2_4olh4")
+position = Vector2(8, -4)
+texture = ExtResource("3_boo5j")
+
+[node name="Anim Player" type="AnimationPlayer" parent="Sprite"]
+libraries = {
+"sprite_animations": ExtResource("4_hnloy")
+}
