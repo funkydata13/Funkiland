@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Reflection.Metadata.Ecma335;
 using Godot;
 
-public partial class C_ActivableArea : Area2D, I_Activable
+public partial class C_ActivableBody : RigidBody2D, I_Activable
 {
     [Export]
     public Node2D[] activationChilds = new Node2D[0];
@@ -27,7 +27,7 @@ public partial class C_ActivableArea : Area2D, I_Activable
         get { return _activable.childsCount; } 
     }
 
-    public C_ActivableArea()
+    public C_ActivableBody()
     {
         _activable = new C_Activable();
     }
@@ -73,6 +73,5 @@ public partial class C_ActivableArea : Area2D, I_Activable
     public virtual void Reset()
     {
         _activable.Reset();
-        Monitorable = true;
     }
 }

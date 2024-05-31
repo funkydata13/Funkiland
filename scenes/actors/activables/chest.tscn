@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://scripts/nodes/C_Inventory.cs" id="4_4nswj"]
 [ext_resource type="Script" path="res://scripts/nodes/C_Stopwatch.cs" id="5_g7gsq"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_u3bjo"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_74vfy"]
 
 [node name="Chest" type="Area2D"]
 collision_layer = 128
@@ -16,12 +16,13 @@ script = ExtResource("1_i1c0t")
 
 [node name="Collider" type="CollisionShape2D" parent="."]
 position = Vector2(17, -10)
-shape = SubResource("RectangleShape2D_u3bjo")
+shape = SubResource("RectangleShape2D_74vfy")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 position = Vector2(20, -16)
 sprite_frames = ExtResource("2_10xgk")
 animation = &"0_0"
+frame_progress = 0.868306
 script = ExtResource("3_7pfs4")
 
 [node name="Inventory" type="Node" parent="."]

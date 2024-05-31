@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://bxgc8wnceinqm"]
+
+[ext_resource type="Script" path="res://scripts/actors/activables/C_Rune.cs" id="1_0tj1r"]
+[ext_resource type="SpriteFrames" uid="uid://bb752w2uiqoij" path="res://assets/spritesheets/rune_01_frames.tres" id="2_oka68"]
+[ext_resource type="Script" path="res://scripts/nodes/C_SpriteAnimated.cs" id="3_jalks"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u3bjo"]
+size = Vector2(15, 15)
+
+[node name="Rune" type="Area2D"]
+collision_layer = 128
+collision_mask = 0
+monitoring = false
+script = ExtResource("1_0tj1r")
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(7.5, -7.5)
+shape = SubResource("RectangleShape2D_u3bjo")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+position = Vector2(8, -8)
+sprite_frames = ExtResource("2_oka68")
+animation = &"runes"
+frame = 6
+frame_progress = 0.527155
+script = ExtResource("3_jalks")

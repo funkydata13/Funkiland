@@ -1,0 +1,38 @@
+[gd_scene load_steps=7 format=3 uid="uid://dyaslhw0g74y6"]
+
+[ext_resource type="Texture2D" uid="uid://b70anhaeqhi3w" path="res://assets/sprites/door_01.png" id="1_6lh4g"]
+[ext_resource type="Script" path="res://scripts/actors/activables/C_Door.cs" id="1_da5cn"]
+[ext_resource type="Script" path="res://scripts/nodes/C_SpriteAnimated.cs" id="3_ixdsg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jjmc2"]
+size = Vector2(12, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bqcls"]
+atlas = ExtResource("1_6lh4g")
+region = Rect2(0, 0, 16, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hgawg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bqcls")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Door" type="RigidBody2D"]
+collision_mask = 0
+lock_rotation = true
+freeze = true
+script = ExtResource("1_da5cn")
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+position = Vector2(8, -24)
+shape = SubResource("RectangleShape2D_jjmc2")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+position = Vector2(8, -24)
+sprite_frames = SubResource("SpriteFrames_hgawg")
+script = ExtResource("3_ixdsg")

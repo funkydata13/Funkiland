@@ -30,7 +30,7 @@
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_04s2f"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2xalx"]
-size = Vector2(27, 20)
+size = Vector2(27, 41)
 
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
@@ -223,7 +223,7 @@ monitorable = false
 script = ExtResource("22_ypct8")
 
 [node name="Collider" type="CollisionShape2D" parent="Actors Detector"]
-position = Vector2(-1.5, 14)
+position = Vector2(-1.5, 3.5)
 shape = SubResource("RectangleShape2D_2xalx")
 
 [node name="Obstacle Detector" type="RayCast2D" parent="."]

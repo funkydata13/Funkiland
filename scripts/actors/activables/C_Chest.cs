@@ -101,7 +101,7 @@ public partial class C_Chest : C_ActivableArea
     public override void Activate()
     {
         base.Activate();
-        if (_targetInventory != null) {Debug.Print("ok1"); _targetInventory.Remove(C_Item.E_Type.Key, _keysNeeded);}
+        if (_targetInventory != null) _targetInventory.Remove(C_Item.E_Type.Key, _keysNeeded);
     }
 
     public override void _PhysicsProcess(double delta)
