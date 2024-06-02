@@ -29,6 +29,7 @@ public partial class C_MachineState : Node
     protected bool _isFacingObstacle;
     protected bool _isFacingPlayer;
     protected bool _isFacingLedge;
+    protected string _obstableClass;
     #endregion
 
     #region Properties
@@ -65,6 +66,11 @@ public partial class C_MachineState : Node
     public bool isFacingSomething
     {
         get { return _isFacingObstacle || _isFacingPlayer; }
+    }
+
+    public string obstacleClass
+    {
+        get { return _obstableClass; }
     }
     #endregion
 
@@ -121,11 +127,13 @@ public partial class C_MachineState : Node
 
         if (obstacleDetector != null && obstacleDetector.IsColliding())
         {
+            _obstableClass = obstacleDetector.GetCollider().GetClass();
             _isFacingPlayer = obstacleDetector.GetCollider() is C_Player;
             _isFacingObstacle = _isFacingPlayer == false;
         }
         else
         {
+            _obstableClass = string.Empty;
             _isFacingPlayer = _isFacingObstacle = false;
         }
         

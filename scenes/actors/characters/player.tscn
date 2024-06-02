@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://b8n4gqouy1r6b"]
+[gd_scene load_steps=36 format=3 uid="uid://b8n4gqouy1r6b"]
 
 [ext_resource type="Script" path="res://scripts/actors/characters/C_Player.cs" id="1_j5pu3"]
 [ext_resource type="Material" uid="uid://bu4gnag3fkcxh" path="res://assets/materials/lit_pixelart.tres" id="2_ibki3"]
@@ -30,6 +30,9 @@
 [ext_resource type="Script" path="res://scripts/machine_state/states/C_StateSlidingStart.cs" id="26_tyw8o"]
 [ext_resource type="Script" path="res://scripts/machine_state/states/C_StateSliding.cs" id="27_maxty"]
 [ext_resource type="Script" path="res://scripts/machine_state/states/C_StateSlidingEnd.cs" id="28_ehlxb"]
+[ext_resource type="Script" path="res://scripts/machine_state/states/C_StateWallContact.cs" id="29_cqieo"]
+[ext_resource type="Script" path="res://scripts/machine_state/states/C_StateWallSliding.cs" id="30_ehuxe"]
+[ext_resource type="Script" path="res://scripts/machine_state/states/C_StateWallJumping.cs" id="31_lcvq3"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_04s2f"]
 
@@ -203,6 +206,17 @@ slidingStartState = NodePath("../Sliding Start")
 [node name="Sliding End" type="Node" parent="Machine State" node_paths=PackedStringArray("slidingStartState")]
 script = ExtResource("28_ehlxb")
 slidingStartState = NodePath("../Sliding Start")
+
+[node name="Wall Contact" type="Node" parent="Machine State"]
+script = ExtResource("29_cqieo")
+spriteOffset = -2.0
+
+[node name="Wall Sliding" type="Node" parent="Machine State" node_paths=PackedStringArray("wallContactState")]
+script = ExtResource("30_ehuxe")
+wallContactState = NodePath("../Wall Contact")
+
+[node name="Wall Jumping" type="Node" parent="Machine State"]
+script = ExtResource("31_lcvq3")
 
 [node name="Inventory" type="Node" parent="."]
 script = ExtResource("18_5dxkx")

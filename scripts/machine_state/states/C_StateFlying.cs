@@ -39,6 +39,7 @@ public partial class C_StateFlying : C_State
     {
         base.Enter();
         SelectSpriteAnimation();
+        airKinematic.peekHeight = float.MaxValue;
     }
 
     public override void CheckStatus(double delta)
@@ -49,6 +50,15 @@ public partial class C_StateFlying : C_State
             machine.ChangeState(airKinematic.isHighFall ? "Landing" : "Idle"); 
             airKinematic.peekHeight = 0;
             return; 
+        }
+
+        if (machine.isFacingObstacle && machine.kinematics.isFalling && machine.obstacleClass == "TileMap")
+        {
+            if (machine.ChangeState("Wall Contact"))
+            {
+                airKinematic.ResetGravity();
+                return;
+            }
         }
 
         if (machine.CanReadInputs)

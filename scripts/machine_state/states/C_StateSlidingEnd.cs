@@ -34,8 +34,8 @@ public partial class C_StateSlidingEnd : C_State
     {
         base.Exit();
 
-        machine.ledgeDetector.TargetPosition = slidingStartState.slideBackup.ledgeTargetPosition;
-        machine.obstacleDetector.TargetPosition = slidingStartState.slideBackup.obstacleTargetPosition;
+        machine.ledgeDetector.TargetPosition = slidingStartState.stateSlide.ledgeTargetPositionBackup;
+        machine.obstacleDetector.TargetPosition = slidingStartState.stateSlide.obstacleTargetPositionBackup;
     }
 
     public override void CheckStatus(double delta)
@@ -47,9 +47,9 @@ public partial class C_StateSlidingEnd : C_State
     #region Physics Process
     public override void _PhysicsProcess(double delta)
     {
-        if (slidingStartState.slideBackup.breakSlide)
+        if (slidingStartState.stateSlide.stateBreakSlide)
         {
-            if (machine.kinematics.isGrounded) groundKinematic.Update(delta, slidingStartState.slideBackup.breakSlideFriction);
+            if (machine.kinematics.isGrounded) groundKinematic.Update(delta, slidingStartState.stateSlide.stateBreakSlideFriction);
             else airKinematic.Update(delta);
         }
 

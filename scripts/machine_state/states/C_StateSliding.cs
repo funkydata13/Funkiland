@@ -34,14 +34,14 @@ public partial class C_StateSliding : C_State
         base.Enter();
         SetSpriteAnimation();
 
-        _frictionFactorDelta = slidingStartState.slideBackup.breakSlide ? slidingStartState.slideBackup.breakSlideFriction : slideKinematic.movementFriction / groundKinematic.movementFriction;
+        _frictionFactorDelta = slidingStartState.stateSlide.stateBreakSlide ? slidingStartState.stateSlide.stateBreakSlideFriction : 
+            slideKinematic.movementFriction / groundKinematic.movementFriction;
     }
 
     public override void CheckStatus(double delta)
     {
         if (machine.kinematics.isDirectionJustChanged || machine.kinematics.isGrounded == false || slideKinematic.isBreak)
         {
-            Debug.Print("b1");
             machine.ChangeState("Sliding End");
             return;
         }
@@ -50,7 +50,6 @@ public partial class C_StateSliding : C_State
         {
             if (C_Inputs.direction.Y > 0 || (C_Inputs.direction.X != 0 && Mathf.Abs(machine.kinematics.velocity.X) <= runKinematic.speed))
             {
-                Debug.Print("b2");
                 machine.ChangeState("Sliding End");
             }
         }
@@ -62,8 +61,8 @@ public partial class C_StateSliding : C_State
     {
         if (machine.isFacingLedge || machine.isFacingObstacle)
         {
-            slidingStartState.slideBackup.breakSlide = true;
-            _frictionFactorDelta = slidingStartState.slideBackup.breakSlideFriction;
+            slidingStartState.stateSlide.stateBreakSlide = true;
+            _frictionFactorDelta = slidingStartState.stateSlide.stateBreakSlideFriction;
         }
 
         if (machine.kinematics.isGrounded) groundKinematic.Update(delta, _frictionFactorDelta);

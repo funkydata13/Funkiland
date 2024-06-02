@@ -3,8 +3,8 @@ using System;
 
 public struct S_StateSlide
 {
-    public bool breakSlide;
-    public float breakSlideFriction;
-    public Vector2 obstacleTargetPosition;
-    public Vector2 ledgeTargetPosition;
+    public bool stateBreakSlide;
+    public float stateBreakSlideFriction;
+    public Vector2 obstacleTargetPositionBackup;
+    public Vector2 ledgeTargetPositionBackup;
 }

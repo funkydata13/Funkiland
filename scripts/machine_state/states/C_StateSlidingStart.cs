@@ -11,7 +11,7 @@ public partial class C_StateSlidingStart : C_State
     public float obstacleDetectionDistance = 30;
     [Export]
     public float frictionFactorOnBreak = 4;
-    public S_StateSlide slideBackup;
+    public S_StateSlide stateSlide;
     protected C_KinematicSlide slideKinematic;
 
     #region Ready
@@ -33,13 +33,13 @@ public partial class C_StateSlidingStart : C_State
         base.Enter();
         SetSpriteAnimation();
 
-        slideBackup = new S_StateSlide() { 
-            breakSlide = false, breakSlideFriction = frictionFactorOnBreak, 
-            ledgeTargetPosition = machine.ledgeDetector.TargetPosition, obstacleTargetPosition = machine.obstacleDetector.TargetPosition 
+        stateSlide = new S_StateSlide() { 
+            stateBreakSlide = false, stateBreakSlideFriction = frictionFactorOnBreak, 
+            ledgeTargetPositionBackup = machine.ledgeDetector.TargetPosition, obstacleTargetPositionBackup = machine.obstacleDetector.TargetPosition 
         };
 
-        machine.ledgeDetector.TargetPosition = new Vector2(slideBackup.ledgeTargetPosition.X, ledgeMinimalHeight);
-        machine.obstacleDetector.TargetPosition = new Vector2(slideBackup.obstacleTargetPosition.X, obstacleDetectionDistance);
+        machine.ledgeDetector.TargetPosition = new Vector2(stateSlide.ledgeTargetPositionBackup.X, ledgeMinimalHeight);
+        machine.obstacleDetector.TargetPosition = new Vector2(stateSlide.obstacleTargetPositionBackup.X, obstacleDetectionDistance);
     }
 
     public override void CheckStatus(double delta)
@@ -47,7 +47,7 @@ public partial class C_StateSlidingStart : C_State
         if (IsOver()) machine.ChangeState("Sliding");
         else if (machine.isFacingLedge || machine.isFacingObstacle)
         {
-            slideBackup.breakSlide = true;
+            stateSlide.stateBreakSlide = true;
             machine.ChangeState("Sliding");
         }
     }

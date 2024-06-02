@@ -13,7 +13,7 @@ public partial class C_DestructibleBody : RigidBody2D, I_AttributeOwner
         get { return _attributes; }
     }
 
-    protected C_SpriteAnimated _sprite;
+    protected AnimatedSprite2D _sprite;
     protected C_Inventory _inventory;
 
     public bool isDestroyed
@@ -25,7 +25,7 @@ public partial class C_DestructibleBody : RigidBody2D, I_AttributeOwner
     {
         base._Ready();
 
-        _sprite = GetNode<C_SpriteAnimated>("Sprite");
+        _sprite = GetNode<AnimatedSprite2D>("Sprite");
         _inventory = GetNode<C_Inventory>("Inventory");
         _attributes = GetNode<C_Attributes>("Attributes");
         if (_attributes == null) GD.PushError("Il n'y a pas de C_Attributes pour l'objet destructible !");
