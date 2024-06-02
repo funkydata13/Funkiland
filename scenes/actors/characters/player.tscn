@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://b8n4gqouy1r6b"]
+[gd_scene load_steps=33 format=3 uid="uid://b8n4gqouy1r6b"]
 
 [ext_resource type="Script" path="res://scripts/actors/characters/C_Player.cs" id="1_j5pu3"]
 [ext_resource type="Material" uid="uid://bu4gnag3fkcxh" path="res://assets/materials/lit_pixelart.tres" id="2_ibki3"]
@@ -18,6 +18,7 @@
 [ext_resource type="Script" path="res://scripts/machine_state/states/C_StateWalking.cs" id="11_wja3e"]
 [ext_resource type="Script" path="res://scripts/machine_state/states/C_StateRunning.cs" id="12_d6kr0"]
 [ext_resource type="Script" path="res://scripts/machine_state/states/C_StateJumping.cs" id="13_66clq"]
+[ext_resource type="Script" path="res://scripts/kinematics/C_KinematicSlide.cs" id="13_el8fv"]
 [ext_resource type="Script" path="res://scripts/machine_state/states/C_StateFlyingJump.cs" id="14_iqch2"]
 [ext_resource type="Script" path="res://scripts/machine_state/states/C_StateLanding.cs" id="16_gmg0r"]
 [ext_resource type="Script" path="res://scripts/machine_state/C_StateStopwatch.cs" id="17_1nx4j"]
@@ -26,6 +27,9 @@
 [ext_resource type="Script" path="res://scripts/machine_state/states/C_StateHitted.cs" id="21_qox5s"]
 [ext_resource type="Script" path="res://scripts/machine_state/states/C_StateDeath.cs" id="22_cd181"]
 [ext_resource type="Script" path="res://scripts/actors/characters/C_ActorDetector.cs" id="22_ypct8"]
+[ext_resource type="Script" path="res://scripts/machine_state/states/C_StateSlidingStart.cs" id="26_tyw8o"]
+[ext_resource type="Script" path="res://scripts/machine_state/states/C_StateSliding.cs" id="27_maxty"]
+[ext_resource type="Script" path="res://scripts/machine_state/states/C_StateSlidingEnd.cs" id="28_ehlxb"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_04s2f"]
 
@@ -114,6 +118,10 @@ timeToAscent = 0.35
 timeToDescent = 0.2
 type = 7
 
+[node name="Slide" type="Node" parent="Kinematics/Ground"]
+script = ExtResource("13_el8fv")
+type = 8
+
 [node name="Machine State" type="Node" parent="." node_paths=PackedStringArray("sprite", "kinematics", "obstacleDetector", "ledgeDetector")]
 script = ExtResource("8_6qh2f")
 sprite = NodePath("../Sprite")
@@ -184,6 +192,17 @@ duration = 0.5
 script = ExtResource("22_cd181")
 attribute = NodePath("../../Attributes/Vitality")
 frictionFactor = 0.25
+
+[node name="Sliding Start" type="Node" parent="Machine State"]
+script = ExtResource("26_tyw8o")
+
+[node name="Sliding" type="Node" parent="Machine State" node_paths=PackedStringArray("slidingStartState")]
+script = ExtResource("27_maxty")
+slidingStartState = NodePath("../Sliding Start")
+
+[node name="Sliding End" type="Node" parent="Machine State" node_paths=PackedStringArray("slidingStartState")]
+script = ExtResource("28_ehlxb")
+slidingStartState = NodePath("../Sliding Start")
 
 [node name="Inventory" type="Node" parent="."]
 script = ExtResource("18_5dxkx")

@@ -53,7 +53,7 @@ public partial class C_KinematicAir : C_Kinematic
         currentFallGravity = currentRaiseGravity = baseGravity;
     }
 
-    public override void update(double delta, float factor = 1)
+    public override void Update(double delta, float factor = 1)
     {
         if (peekHeight > character.Position.Y) peekHeight = character.GlobalPosition.Y;
         character.Velocity = new Vector2(character.Velocity.X, Mathf.Clamp(character.Velocity.Y + (gravity * factor * (float)delta), -maximumSpeed, maximumSpeed));

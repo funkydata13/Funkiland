@@ -41,7 +41,7 @@ public partial class C_StateJumping : C_State
         if (_trigger)
         {
             _trigger = false;
-            jumpKinematic.update(delta);
+            jumpKinematic.Update(delta);
         }
         
         base._PhysicsProcess(delta);

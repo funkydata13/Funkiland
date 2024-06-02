@@ -3,16 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-public partial class C_StateLanding : C_State
+public partial class C_StateSlidingEnd : C_State
 {
     #region Variables
     [Export]
-    public C_Attribute damagedAttribute;
-    [Export]
-    public float frictionFactor = 2;
+    public C_StateSlidingStart slidingStartState;
     protected C_KinematicAir airKinematic;
     protected C_KinematicGround groundKinematic;
-    protected float _damage = 0;
     #endregion
 
     #region Ready
@@ -21,40 +18,41 @@ public partial class C_StateLanding : C_State
         base._Ready();
         airKinematic = machine.kinematics.GetChildKinematic<C_KinematicAir>(C_Kinematic.E_Type.Air);
         groundKinematic = machine.kinematics.GetChildKinematic<C_KinematicGround>(C_Kinematic.E_Type.Ground);
+
+        if (slidingStartState == null) GD.PushError("Le C_StateSlidingEnd n'a pas de C_StateSlidingStart attaché !");
     }
     #endregion
 
     #region Functions Overrides
-    public override bool CanEnter()
-    {
-        return groundKinematic != null;
-    }
-
     public override void Enter()
     {
         base.Enter();
         SetSpriteAnimation();
+    }
 
-        if (damagedAttribute != null) _damage = damagedAttribute.maximumValue * (airKinematic.fallHeight - airKinematic.maximumFallHeight) / airKinematic.maximumFallHeight;
-        else _damage = 0;
+    public override void Exit()
+    {
+        base.Exit();
+
+        machine.ledgeDetector.TargetPosition = slidingStartState.slideBackup.ledgeTargetPosition;
+        machine.obstacleDetector.TargetPosition = slidingStartState.slideBackup.obstacleTargetPosition;
     }
 
     public override void CheckStatus(double delta)
     {
-        if (IsOver()) machine.ChangeState("Idle");
+        if (IsOver()) machine.ChangeState(machine.kinematics.isGrounded ? "Idle" : "Flying");
     }
     #endregion
 
     #region Physics Process
     public override void _PhysicsProcess(double delta)
     {
-        if (_trigger && _damage > 0)
+        if (slidingStartState.slideBackup.breakSlide)
         {
-            _trigger = false;
-            damagedAttribute.ModifyValue(C_Attribute.E_Action.Damage, _damage, null, 0);
+            if (machine.kinematics.isGrounded) groundKinematic.Update(delta, slidingStartState.slideBackup.breakSlideFriction);
+            else airKinematic.Update(delta);
         }
 
-        groundKinematic.Update(delta);
         base._PhysicsProcess(delta);
     }
     #endregion

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public partial class C_Kinematic : Node
 {
-    public enum E_Type { Root, Air, Ground, Move, Walk, Run, Sprint, Jump }
+    public enum E_Type { Root, Air, Ground, Move, Walk, Run, Sprint, Jump, Slide }
 
     #region Variables
     [Export]
@@ -82,6 +82,6 @@ public partial class C_Kinematic : Node
         else character.Velocity = new Vector2(velocityX, character.Velocity.Y);
     }
 
-    public virtual void update(double delta, float factor = 1) { }
+    public virtual void Update(double delta, float factor = 1) { }
     #endregion
 }

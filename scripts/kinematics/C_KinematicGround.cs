@@ -17,7 +17,7 @@ public partial class C_KinematicGround : C_Kinematic
     #endregion
 
     #region Update
-    public override void update(double delta, float factor = 1)
+    public override void Update(double delta, float factor = 1)
     {
         character.Velocity = new Vector2(Mathf.Clamp(Mathf.MoveToward(character.Velocity.X, 0, movementFriction * factor), -maximumSpeed, maximumSpeed), character.Velocity.Y);
     }

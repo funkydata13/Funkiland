@@ -50,7 +50,7 @@ public partial class C_StateIdle : C_State
     #region Physics Process
     public override void _PhysicsProcess(double delta)
     {
-        groundKinematic.update(delta);
+        groundKinematic.Update(delta);
         base._PhysicsProcess(delta);
     }
     #endregion

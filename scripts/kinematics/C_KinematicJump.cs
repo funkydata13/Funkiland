@@ -34,7 +34,7 @@ public partial class C_KinematicJump : C_Kinematic
     #endregion
 
     #region Update
-    public override void update(double delta, float factor = 1)
+    public override void Update(double delta, float factor = 1)
     {
         float jumpVelocity = 0;
 

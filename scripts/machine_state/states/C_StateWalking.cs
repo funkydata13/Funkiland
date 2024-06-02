@@ -51,7 +51,7 @@ public partial class C_StateWalking : C_State
     #region Physics Process
     public override void _PhysicsProcess(double delta)
     {
-        moveKinematic.update(delta);
+        moveKinematic.Update(delta);
         base._PhysicsProcess(delta);
     }
     #endregion

@@ -8,8 +8,8 @@ public partial class C_Barrel : C_DestructibleBody
 {
     private static List<List<string>> LootTable = new List<List<string>>()
     {
-        new List<string>() { "1|1-2-3-4|50-30-15-5", "100|1-2-3|85-10-5|85-10-5" },
-        new List<string>() { "1|1-2-3-4|40-40-15-5", "100|1-2-3|90-7-3|85-10-5" },
+        new List<string>() { "1|1-2-3-4|50-30-15-5", "100|1-2-3|85-10-5|75-20-5" },
+        new List<string>() { "1|1-2-3-4|40-40-15-5", "100|1-2-3|90-7-3|75-20-5" },
         new List<string>() { "1|1-2-3-4|70-15-10-5" }
     };
 

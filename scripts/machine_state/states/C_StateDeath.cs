@@ -60,8 +60,8 @@ public partial class C_StateDeath : C_State
     #region Physics Process
     public override void _PhysicsProcess(double delta)
     {
-        if (machine.kinematics.isGrounded) groundKinematic.update(delta, frictionFactor);
-        else airKinematic.update(delta, frictionFactor);
+        if (machine.kinematics.isGrounded) groundKinematic.Update(delta, frictionFactor);
+        else airKinematic.Update(delta, frictionFactor);
 
         base._PhysicsProcess(delta);
     }

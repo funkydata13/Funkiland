@@ -20,10 +20,10 @@ script = ExtResource("1_ssrbo")
 currentPlayerSpawner = NodePath("Player Spawner")
 
 [node name="Player Spawner" parent="." instance=ExtResource("2_p7w2u")]
-position = Vector2(416, -80)
+position = Vector2(64, -80)
 
 [node name="Player Camera" type="Camera2D" parent="."]
-position = Vector2(416, -80)
+position = Vector2(64, -80)
 zoom = Vector2(3, 3)
 process_callback = 0
 position_smoothing_enabled = true

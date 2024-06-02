@@ -104,8 +104,8 @@ public partial class C_StateAttacking : C_State
 
     public override void _PhysicsProcess(double delta)
     {
-        if (machine.kinematics.isGrounded) groundKinematic.update(delta);
-        else airKinematic.update(delta);
+        if (machine.kinematics.isGrounded) groundKinematic.Update(delta);
+        else airKinematic.Update(delta);
 
         base._PhysicsProcess(delta);
     }

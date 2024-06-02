@@ -64,8 +64,8 @@ public partial class C_StateFlying : C_State
     {
         if (animationNameOverride == string.Empty) SelectSpriteAnimation();
 
-        airKinematic.update(delta);
-        if (moveKinematic != null && machine.CanReadInputs && C_Inputs.direction.X != 0) moveKinematic.update(delta);
+        airKinematic.Update(delta);
+        if (moveKinematic != null && machine.CanReadInputs && C_Inputs.direction.X != 0) moveKinematic.Update(delta);
 
         base._PhysicsProcess(delta);
     }

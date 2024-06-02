@@ -38,6 +38,7 @@ public partial class C_StateRunning : C_State
         {
             if (C_Inputs.IsActionJustPressed("jump") && machine.ChangeState("Jumping")) return;
             if (C_Inputs.IsActionJustPressed("attack") && machine.ChangeState("Attacking 1")) return;
+            if (C_Inputs.IsActionJustPressed("slide") && machine.ChangeState("Sliding Start")) return;
             if (C_Inputs.direction.X != 0)
             {
                 if (C_Inputs.IsActionPressed("walk") && Mathf.Abs(C_Inputs.direction.X) <= 0.5f)
@@ -51,7 +52,7 @@ public partial class C_StateRunning : C_State
     #region Physics Process
     public override void _PhysicsProcess(double delta)
     {
-        moveKinematic.update(delta);
+        moveKinematic.Update(delta);
         base._PhysicsProcess(delta);
     }
     #endregion
