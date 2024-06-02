@@ -1,0 +1,55 @@
+[gd_scene load_steps=11 format=3 uid="uid://bcufco7b1hhb7"]
+
+[ext_resource type="Script" path="res://scripts/actors/destructibles/C_Barrel.cs" id="1_kagr1"]
+[ext_resource type="Material" uid="uid://bu4gnag3fkcxh" path="res://assets/materials/lit_pixelart.tres" id="2_8q17s"]
+[ext_resource type="SpriteFrames" uid="uid://bovw0qqy4xuqv" path="res://assets/spritesheets/barrel_01_frames.tres" id="2_gy1au"]
+[ext_resource type="Script" path="res://scripts/nodes/C_SpriteAnimated.cs" id="3_qylfm"]
+[ext_resource type="AnimationLibrary" uid="uid://wjfghh1fu0yy" path="res://assets/animations/sprite_animations.res" id="5_8l5og"]
+[ext_resource type="Script" path="res://scripts/actors/attributes/C_Attributes.cs" id="6_r54yb"]
+[ext_resource type="Script" path="res://scripts/actors/attributes/C_Attribute.cs" id="7_x71by"]
+[ext_resource type="Script" path="res://scripts/animations/C_AnimationAttributeFlash.cs" id="8_bex1o"]
+[ext_resource type="Script" path="res://scripts/nodes/C_Inventory.cs" id="9_fb82y"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iupmj"]
+size = Vector2(16, 16)
+
+[node name="Barrel" type="RigidBody2D"]
+collision_layer = 8
+collision_mask = 7
+lock_rotation = true
+script = ExtResource("1_kagr1")
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+position = Vector2(8, -8)
+shape = SubResource("RectangleShape2D_iupmj")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+material = ExtResource("2_8q17s")
+position = Vector2(8, -8)
+sprite_frames = ExtResource("2_gy1au")
+animation = &"1"
+script = ExtResource("3_qylfm")
+
+[node name="Anim Player" type="AnimationPlayer" parent="Sprite"]
+libraries = {
+"sprite_animations": ExtResource("5_8l5og")
+}
+
+[node name="Attributes" type="Node" parent="."]
+script = ExtResource("6_r54yb")
+
+[node name="Vitality" type="Node" parent="Attributes"]
+script = ExtResource("7_x71by")
+currentValue = 5.0
+maximumValue = 5.0
+
+[node name="Damage Flash" type="Node" parent="Attributes/Vitality" node_paths=PackedStringArray("canvas", "player")]
+script = ExtResource("8_bex1o")
+canvas = NodePath("../../../Sprite")
+color = Color(1, 1, 0.690196, 1)
+triggerOn = 2
+player = NodePath("../../../Sprite/Anim Player")
+playSpeed = 5.0
+
+[node name="Inventory" type="Node" parent="."]
+script = ExtResource("9_fb82y")
